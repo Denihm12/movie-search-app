@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DENIHM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Space+Grotesk:wght@600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header class="app-header">
+        <div class="brand">
+            <svg class="brand-icon" viewBox="0 0 40 40" width="36" height="36">
+                <defs>
+                    <linearGradient id="logoGradient" x1="0" y1="0" x2="40" y2="40">
+                        <stop offset="0%" stop-color="#ff5f6d" />
+                        <stop offset="100%" stop-color="#845ec2" />
+                    </linearGradient>
+                </defs>
+                <rect width="40" height="40" rx="11" fill="url(#logoGradient)" />
+                <path d="M15 12 L28 20 L15 28 Z" fill="white" />
+            </svg>
+            <span class="brand-name">DENIHM</span>
+        </div>
+
+        <div class="search-bar">
+            <input type="text" id="search-input" placeholder="Search for a movie...">
+            <button id="searchbutton">Search</button>
+            <button id="favoritesbutton">★ Favorites</button>
+        </div>
+    </header>
+
+    <main>
+        <div id="search-results"></div>
+    </main>
+
+    <div id="movie-modal" class="hidden">
+        <div class="modal-content">
+            <button id="modal-close">&times;</button>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

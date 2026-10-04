@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DENIHM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header class="app-header" id="app-header">
+        <div class="nav-left">
+            <a class="brand" id="brand-link" href="#" aria-label="DENIHM home">
+                <svg class="brand-icon" viewBox="0 0 40 40" width="34" height="34" aria-hidden="true">
+                    <defs>
+                        <linearGradient id="logoGradient" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="#ff5f6d" />
+                            <stop offset="100%" stop-color="#845ec2" />
+                        </linearGradient>
+                    </defs>
+                    <rect width="40" height="40" rx="11" fill="url(#logoGradient)" />
+                    <path d="M15 12 L28 20 L15 28 Z" fill="white" />
+                </svg>
+                <span class="brand-name">DENIHM</span>
+            </a>
+
+            <nav class="nav-links" aria-label="Main">
+                <button class="nav-link active" id="homebutton">Home</button>
+                <button class="nav-link" id="favoritesbutton">My Favorites</button>
+            </nav>
+        </div>
+
+        <div class="search-bar">
+            <input type="search" id="search-input" placeholder="Search movies" aria-label="Search movies">
+            <button id="searchbutton">Search</button>
+        </div>
+    </header>
+
+    <main>
+        <section id="hero" class="hero hidden" aria-live="polite"></section>
+        <nav id="genre-bar" class="genre-bar" aria-label="Genres"></nav>
+        <div id="search-results"></div>
+    </main>
+
+    <div id="movie-modal" class="hidden" aria-hidden="true">
+        <div id="modal-scrim"></div>
+        <aside class="modal-content" role="dialog" aria-modal="true" aria-label="Movie details">
+            <button id="modal-close" aria-label="Close details">&times;</button>
+            <div id="modal-body"></div>
+        </aside>
+    </div>
+
+    <div id="toast" role="status" aria-live="polite"></div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
