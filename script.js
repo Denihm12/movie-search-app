@@ -25,7 +25,7 @@ const NO_POSTER = 'https://placehold.co/342x513/12121f/9a9ab0?text=No+Poster';
 //   'http://192.168.1.42:5000'.
 // - A published app: this must point to a real, always-on server address
 //   (e.g. Render, Railway).
-const API_BASE = 'http://localhost:5000';
+const API_BASE = 'https://movie-search-app-q1x1.onrender.com';
 
 // ---------------------------------------------------------------------
 // Categories. To add a new row/genre chip, add one line here.
