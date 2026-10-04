@@ -293,32 +293,24 @@ async function searchMovies() {
     }
 }
 
-async function showFavorites() {
+function showFavorites() {
     leaveHome();
     setActiveNav('favorites');
     setActiveChip('');
-    setLoading(true);
-    searchResults.innerHTML = '<p class="status-message">Loading favorites...</p>';
 
-    try {
-        const favorites = await api('/favorites');
-        favoriteIds = new Set(favorites.map(f => f.id));
+    const favorites = readFavorites();
+    favoriteIds = new Set(favorites.map(f => f.id));
 
-        if (favorites.length === 0) {
-            searchResults.innerHTML = '<p class="status-message">No favorites yet. Open any movie and choose Add to Favorites.</p>';
-            return;
-        }
-
-        searchResults.innerHTML = `
-            <h2 class="view-title">My Favorites</h2>
-            <div class="results-grid">${cardsHTML(favorites)}</div>
-        `;
-        window.scrollTo({ top: 0 });
-    } catch (error) {
-        searchResults.innerHTML = '<p class="status-message">Could not reach the server. Is the backend running?</p>';
-    } finally {
-        setLoading(false);
+    if (favorites.length === 0) {
+        searchResults.innerHTML = '<p class="status-message">No favorites yet. Open any movie and choose Add to Favorites.</p>';
+        return;
     }
+
+    searchResults.innerHTML = `
+        <h2 class="view-title">My Favorites</h2>
+        <div class="results-grid">${cardsHTML(favorites)}</div>
+    `;
+    window.scrollTo({ top: 0 });
 }
 
 // ---------------------------------------------------------------------
@@ -353,50 +345,53 @@ async function loadHero() {
 // ---------------------------------------------------------------------
 // Favorites state
 // ---------------------------------------------------------------------
+const FAV_KEY = 'denihm-favorites';
 let favoriteIds = new Set();
 
-async function loadFavoriteIds() {
+function readFavorites() {
     try {
-        const favorites = await api('/favorites');
-        favoriteIds = new Set(favorites.map(f => f.id));
+        const saved = JSON.parse(localStorage.getItem(FAV_KEY));
+        return Array.isArray(saved) ? saved : [];
     } catch (error) {
-        favoriteIds = new Set();
+        return [];
     }
+}
+
+function writeFavorites(list) {
+    localStorage.setItem(FAV_KEY, JSON.stringify(list));
+    favoriteIds = new Set(list.map(f => f.id));
+}
+
+function loadFavoriteIds() {
+    favoriteIds = new Set(readFavorites().map(f => f.id));
 }
 
 function favoriteButtonLabel(movieId) {
     return favoriteIds.has(movieId) ? '★ In Favorites' : '☆ Add to Favorites';
 }
 
-async function toggleFavorite(movie, button) {
-    button.disabled = true;
-
+function toggleFavorite(movie, button) {
     try {
+        const list = readFavorites();
+
         if (favoriteIds.has(movie.id)) {
-            await fetch(`${API_BASE}/favorites/${movie.id}`, { method: 'DELETE' });
-            favoriteIds.delete(movie.id);
+            writeFavorites(list.filter(f => f.id !== movie.id));
             showToast(`Removed ${movie.title} from favorites`);
         } else {
-            await fetch(`${API_BASE}/favorites`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    id: movie.id,
-                    title: movie.title,
-                    poster_path: movie.poster_path,
-                    release_date: movie.release_date,
-                    rating: movie.rating
-                })
-            });
-            favoriteIds.add(movie.id);
+            writeFavorites([{
+                id: movie.id,
+                title: movie.title,
+                poster_path: movie.poster_path,
+                release_date: movie.release_date,
+                rating: movie.rating
+            }, ...list]);
             showToast(`Added ${movie.title} to favorites`);
         }
+
         button.textContent = favoriteButtonLabel(movie.id);
         button.className = favoriteIds.has(movie.id) ? 'btn-glass' : 'btn-primary';
     } catch (error) {
-        showToast('Could not update favorites. Is the backend running?');
-    } finally {
-        button.disabled = false;
+        showToast('Could not save favorites in this browser.');
     }
 }
 
